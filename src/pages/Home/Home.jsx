@@ -7,6 +7,8 @@ import Modal from 'react-modal'
 import { useNavigate } from 'react-router-dom'
 import axiosInstance from '../../utils/axiosInstance'
 import Toast from '../../components/ToastMessage/Toast'
+import EmptyMessage from '../../components/EmptyMessage/EmptyMessage'
+import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner'
 
 const Home = () => {
   const [openAddEditModal, setOpenAddEditModal] = useState({
@@ -22,6 +24,7 @@ const Home = () => {
 
   const [notes, setNotes] = useState([])
   const [user, setUser] = useState(null)
+  const [loading, setLoading] = useState(true)
 
   const navigate = useNavigate()
 
@@ -67,30 +70,43 @@ const Home = () => {
   }
 
   useEffect(() => {
-    getNotes()
-    getUser()
+    const fetchData = async () => {
+      setLoading(true)
+      await getUser()
+      await getNotes()
+      setLoading(false)
+    }
+    fetchData()
   }, [])
+
+  if (loading) {
+    return <LoadingSpinner />
+  }
 
   return (
     <>
       <Navbar user={user} />
 
       <div className="container mx-auto">
-        <div className="grid grid-cols-3 gap-4 mt-8">
-          {notes.notes.map((note) => (
-            <NoteCard
-              key={note._id}
-              title={note.title}
-              date={note.createdAt}
-              content={note.content}
-              tags={note.tags}
-              isPinned={note.isPinned}
-              onEdit={() => handleEditNote(note)}
-              onDelete={() => deleteNote(note._id)}
-              onPinNote={() => {}}
-            />
-          ))}
-        </div>
+        {notes.notes.length > 0 ? (
+          <div className="grid grid-cols-3 gap-4 mt-8">
+            {notes.notes.map((note) => (
+              <NoteCard
+                key={note._id}
+                title={note.title}
+                date={note.createdAt}
+                content={note.content}
+                tags={note.tags}
+                isPinned={note.isPinned}
+                onEdit={() => handleEditNote(note)}
+                onDelete={() => deleteNote(note._id)}
+                onPinNote={() => {}}
+              />
+            ))}
+          </div>
+        ) : (
+          <EmptyMessage message="No notes here yet! Time to jot down your thoughts and ideas." />
+        )}
       </div>
 
       <button
