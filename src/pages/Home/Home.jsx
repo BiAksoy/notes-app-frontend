@@ -34,7 +34,7 @@ const Home = () => {
   }
 
   const handleCloseToast = () => {
-    setShowToast({ isShown: false, message: ''})
+    setShowToast({ isShown: false, message: '' })
   }
 
   const getUser = async () => {
@@ -51,6 +51,16 @@ const Home = () => {
     try {
       const response = await axiosInstance.get('/notes')
       setNotes(response.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const deleteNote = async (noteId) => {
+    try {
+      await axiosInstance.delete(`/delete-note/${noteId}`)
+      showToastMessage('Note deleted successfully', 'delete')
+      getNotes()
     } catch (error) {
       console.log(error)
     }
@@ -76,7 +86,7 @@ const Home = () => {
               tags={note.tags}
               isPinned={note.isPinned}
               onEdit={() => handleEditNote(note)}
-              onDelete={() => {}}
+              onDelete={() => deleteNote(note._id)}
               onPinNote={() => {}}
             />
           ))}
