@@ -18,6 +18,10 @@ const Home = () => {
   const [user, setUser] = useState(null)
 
   const navigate = useNavigate()
+  
+  const handleEditNote = (note) => {
+    setOpenAddEditModal({ isShown: true, type: 'edit', data: note })
+  }
 
   const getUser = async () => {
     try {
@@ -57,7 +61,7 @@ const Home = () => {
               content={note.content}
               tags={note.tags}
               isPinned={note.isPinned}
-              onEdit={() => {}}
+              onEdit={() => handleEditNote(note)}
               onDelete={() => {}}
               onPinNote={() => {}}
             />
@@ -93,6 +97,7 @@ const Home = () => {
           onClose={() =>
             setOpenAddEditModal({ isShown: false, type: 'add', data: null })
           }
+          getNotes={getNotes}
         />
       </Modal>
     </>
