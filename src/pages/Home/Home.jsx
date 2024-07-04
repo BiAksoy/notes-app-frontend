@@ -82,6 +82,16 @@ const Home = () => {
     }
   }
 
+  const pinNote = async (noteId) => {
+    try {
+      await axiosInstance.put(`/pin-note/${noteId}`)
+      showToastMessage('Note updated successfully')
+      getNotes()
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   const handleClearSearch = async () => {
     setSearch(false)
     getNotes()
@@ -101,6 +111,9 @@ const Home = () => {
     return <LoadingSpinner />
   }
 
+  const pinnedNotes = notes.notes.filter((note) => note.isPinned)
+  const otherNotes = notes.notes.filter((note) => !note.isPinned)
+
   return (
     <>
       <Navbar
@@ -110,9 +123,9 @@ const Home = () => {
       />
 
       <div className="container mx-auto">
-        {notes.notes.length > 0 ? (
+        {pinnedNotes.length > 0 || otherNotes.length > 0 ? (
           <div className="grid grid-cols-3 gap-4 mt-8">
-            {notes.notes.map((note) => (
+            {pinnedNotes.map((note) => (
               <NoteCard
                 key={note._id}
                 title={note.title}
@@ -122,7 +135,21 @@ const Home = () => {
                 isPinned={note.isPinned}
                 onEdit={() => handleEditNote(note)}
                 onDelete={() => deleteNote(note._id)}
-                onPinNote={() => {}}
+                onPinNote={() => pinNote(note._id)}
+              />
+            ))}
+
+            {otherNotes.map((note) => (
+              <NoteCard
+                key={note._id}
+                title={note.title}
+                date={note.createdAt}
+                content={note.content}
+                tags={note.tags}
+                isPinned={note.isPinned}
+                onEdit={() => handleEditNote(note)}
+                onDelete={() => deleteNote(note._id)}
+                onPinNote={() => pinNote(note._id)}
               />
             ))}
           </div>
