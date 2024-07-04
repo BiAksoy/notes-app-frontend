@@ -14,6 +14,7 @@ const Home = () => {
     data: null,
   })
 
+  const [notes, setNotes] = useState([])
   const [user, setUser] = useState(null)
 
   const navigate = useNavigate()
@@ -28,7 +29,17 @@ const Home = () => {
     }
   }
 
+  const getNotes = async () => {
+    try {
+      const response = await axiosInstance.get('/notes')
+      setNotes(response.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   useEffect(() => {
+    getNotes()
     getUser()
   }, [])
 
@@ -38,16 +49,19 @@ const Home = () => {
 
       <div className="container mx-auto">
         <div className="grid grid-cols-3 gap-4 mt-8">
-          <NoteCard
-            title="Meeting Notes"
-            date="28 Jun 2024"
-            content="Meeting with the team to discuss the new project."
-            tags="#meeting #project"
-            isPinned={true}
-            onEdit={() => {}}
-            onDelete={() => {}}
-            onPinNote={() => {}}
-          />
+          {notes.notes.map((note) => (
+            <NoteCard
+              key={note._id}
+              title={note.title}
+              date={note.createdAt}
+              content={note.content}
+              tags={note.tags}
+              isPinned={note.isPinned}
+              onEdit={() => {}}
+              onDelete={() => {}}
+              onPinNote={() => {}}
+            />
+          ))}
         </div>
       </div>
 
