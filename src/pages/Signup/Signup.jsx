@@ -1,14 +1,17 @@
 import React, { useState } from 'react'
 import Navbar from '../../components/Navbar/Navbar'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import PasswordInput from '../../components/Input/PasswordInput'
 import { validateEmail } from '../../utils/helper'
+import axiosInstance from '../../utils/axiosInstance'
 
 const Signup = () => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState(null)
+
+  const navigate = useNavigate()
 
   const handleSignup = async (e) => {
     e.preventDefault()
@@ -30,7 +33,18 @@ const Signup = () => {
 
     setError('')
 
-    // Signup API call
+    try {
+      const response = await axiosInstance.post('/signup', {
+        name,
+        email,
+        password,
+      })
+
+      localStorage.setItem('token', response.data.token)
+      navigate('/dashboard')
+    } catch (error) {
+      setError(error.response.data.message)
+    }
   }
 
   return (
