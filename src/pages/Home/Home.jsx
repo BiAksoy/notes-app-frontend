@@ -25,6 +25,7 @@ const Home = () => {
   const [notes, setNotes] = useState([])
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [search, setSearch] = useState(false)
 
   const navigate = useNavigate()
 
@@ -69,6 +70,23 @@ const Home = () => {
     }
   }
 
+  const onSearchNote = async (searchQuery) => {
+    try {
+      const response = await axiosInstance.get(
+        `/search-notes/?query=${searchQuery}`
+      )
+      setSearch(true)
+      setNotes(response.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const handleClearSearch = async () => {
+    setSearch(false)
+    getNotes()
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true)
@@ -85,7 +103,11 @@ const Home = () => {
 
   return (
     <>
-      <Navbar user={user} />
+      <Navbar
+        user={user}
+        onSearchNote={onSearchNote}
+        handleClearSearch={handleClearSearch}
+      />
 
       <div className="container mx-auto">
         {notes.notes.length > 0 ? (
@@ -105,7 +127,13 @@ const Home = () => {
             ))}
           </div>
         ) : (
-          <EmptyMessage message="No notes here yet! Time to jot down your thoughts and ideas." />
+          <EmptyMessage
+            message={
+              search
+                ? 'Oops! No notes found for your search.'
+                : 'No notes here yet! Time to jot down your thoughts and ideas.'
+            }
+          />
         )}
       </div>
 
