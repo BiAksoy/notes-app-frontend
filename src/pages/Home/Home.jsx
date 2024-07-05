@@ -43,7 +43,7 @@ const Home = () => {
 
   const getUser = async () => {
     try {
-      const response = await axiosInstance.get('/user')
+      const response = await axiosInstance.get('/users/me')
       setUser(response.data)
     } catch (error) {
       localStorage.removeItem('token')
@@ -62,7 +62,7 @@ const Home = () => {
 
   const deleteNote = async (noteId) => {
     try {
-      await axiosInstance.delete(`/delete-note/${noteId}`)
+      await axiosInstance.delete(`/notes/${noteId}`)
       showToastMessage('Note deleted successfully', 'delete')
       getNotes()
     } catch (error) {
@@ -73,7 +73,7 @@ const Home = () => {
   const onSearchNote = async (searchQuery) => {
     try {
       const response = await axiosInstance.get(
-        `/search-notes/?query=${searchQuery}`
+        `/notes/search?query=${searchQuery}`
       )
       setSearch(true)
       setNotes(response.data)
@@ -84,7 +84,7 @@ const Home = () => {
 
   const pinNote = async (noteId) => {
     try {
-      await axiosInstance.put(`/pin-note/${noteId}`)
+      await axiosInstance.put(`/notes/${noteId}/pin`)
       showToastMessage('Note updated successfully')
       getNotes()
     } catch (error) {

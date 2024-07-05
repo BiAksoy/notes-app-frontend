@@ -34,7 +34,7 @@ const Signup = () => {
     setError('')
 
     try {
-      const response = await axiosInstance.post('/signup', {
+      const response = await axiosInstance.post('/users/signup', {
         name,
         email,
         password,
