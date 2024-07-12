@@ -1,8 +1,41 @@
-# React + Vite
+# Notes App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a notes app that allows users to authenticate and manage their notes. It is built using React and Tailwind CSS. This frontend is for the backend available [here](https://github.com/BiAksoy/notes-app-backend).
 
-Currently, two official plugins are available:
+## Getting Started
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Requirements
+
+- Node.js
+
+### Installation
+
+1. Install the dependencies:
+
+   ```bash
+   npm install
+   ```
+
+2. By default, the app is configured to use the backend running on `http://localhost:8000`. If you are running the backend on a different URL, you can change the `BASE_URL` in `src/utils/constants.js`:
+
+   ```javascript
+   export const BASE_URL = 'http://localhost:8000'
+   ```
+
+3. Start the development server:
+
+   ```bash
+   npm run dev
+   ```
+
+   The application will start on `http://localhost:5173`.
+
+## Screenshots
+
+![Login](src/assets/screenshots/screenshot_1.png)
+
+![Signup](src/assets/screenshots/screenshot_2.png)
+
+![Dashboard](src/assets/screenshots/screenshot_3.png)
+
+![Add Note](src/assets/screenshots/screenshot_4.png)
